@@ -71,57 +71,25 @@ var showItems = function() {
         console.log("-----------------------------------");
         selectItem();
     });
-
 }
       
 
 var selectItem = function() {
-    connection.query("SELECT * FROM products", function(err, res) {
-        //console.log(res);
         inquirer.prompt([{
             name: "choice",
             type: "input",
             message: "What is the item you would like to buy, please use the product's id number?",
             // validates data entry/checks that input is a valid entry
-            validate: function(input) {
-                // declare function as asynchronous, and save the done callback
-                var done = this.async();
-                // Do async stuff
-                setTimeout(function() {
-                    // checking if user input for item_id is found in availableItems item_id array
-                    if (availableItems.indexOf(parseInt(input)) == -1) {
-                        // pass the return value in the done callback
-                        done('Please provide a valid product id');
-                        return;
-                    }
-                    done(null, true);
-                }, 200);
-            }
         }, {
             name: "units",
             type: "input",
             message: "how many units of the product they would like to buy?",
             // validates data entry/checks that input is a valid entry
-            validate: function(input) {
-                // declare function as asynchronous, and save the done callback
-                var done = this.async();
-                // Do async stuff
-                setTimeout(function() {
-                    // checking if user input for item_id is found in availableItems item_id array
-                    if (availableItems.indexOf(parseInt(input)) == -1) {
-                        // pass the return value in the done callback
-                        done('Please provide a valid product id');
-                        return;
-                    }
-                    done(null, true);
-                }, 200);
-            }
             
         }]).then(function(answer) {
             availability(answer.choice, answer.units);
         });
-    })
-}
+    }
 
 
 var availability = function(choice, units) {
@@ -134,7 +102,8 @@ var availability = function(choice, units) {
         } else {
             var total = units * res[0].price;
             var stockLeft = res[0].stock_quantity - units;
-            console.log("There are " + stockLeft + "left")
+            console.log("There are " + stockLeft + "left in our store")
+            console.log("The price is going to be"+ " $" + total + " dollars")
             newInventory(choice, stockLeft);
 
         }
